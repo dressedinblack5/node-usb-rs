@@ -160,10 +160,10 @@ describe 'Interfaces', ->
 
     if process.platform == 'linux'
         it "should fail to detach the kernel driver", ->
-            assert.throws -> device.detachKernelDriver(0)
+            assert.rejects(device.detachKernelDriver(0))
 
-        it "should fail to attach the kernel driver", ->
-            assert.throws -> device.attachKernelDriver(0)
+        it "should attach the kernel driver", ->
+            assert.doesNotReject(device.attachKernelDriver(0))
 
     after ->
         device.close()

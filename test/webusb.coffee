@@ -180,7 +180,8 @@ describe 'Alternates', ->
 
     after ->
         await device.releaseInterface(0)
-        await device.reset()
+        if process.platform != 'win32'
+            await device.reset()
         device.close()
         await new Promise (resolve) -> setTimeout(resolve, 1000)
 

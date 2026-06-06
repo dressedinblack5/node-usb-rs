@@ -50,6 +50,13 @@ impl Emitter {
 
         let callbacks = self.callbacks.clone();
         let mut listeners_rx = self.listeners_tx.subscribe();
+        let mut watch_stream = match nusb::watch_devices() {
+            Ok(watch_stream) => watch_stream,
+            Err(e) => {
+                self.initialized.store(false, Ordering::Release);
+                return Err(napi::Error::from_reason(format!("init error: {e}")));
+            }
+        };
 
         tokio::spawn(async move {
             loop {
@@ -58,10 +65,6 @@ impl Emitter {
                     return;
                 }
 
-                let mut watch_stream = match nusb::watch_devices() {
-                    Ok(watch_stream) => watch_stream,
-                    Err(_) => return,
-                };
                 loop {
                     tokio::select! {
                         _ = listeners_rx.changed() => {

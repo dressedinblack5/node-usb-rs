@@ -42,8 +42,8 @@
   "scripts": {
     "clean": "git clean -fx ./dist ./target ./node_modules ./npm",
     "artifacts": "napi artifacts",
-    "build": "napi build --platform --release",
-    "build:ts": "tsc",
+    "build": "npx --yes @napi-rs/cli build --platform --release",
+    "build:ts": "npx --yes tsc",
     "prepare": "npm run build:all",
     "build:all": "npm run build && npm run build:ts",
     "format": "cargo fmt",
